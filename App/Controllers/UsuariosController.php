@@ -1,4 +1,4 @@
-</php 
+<?php 
 
 class UsuarioController
 {
@@ -115,6 +115,79 @@ class UsuarioController
     public function atualizar(): void
     {
         header('Content-Type: application/json; charset=utf-8')
+
+        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $nome = trim($_POST['nome'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+        $perfil = $_POST['perfil'] ?? 'atendente';
+        $status = $_POST['status'] ?? 'ativo';
+
+        if (!$id || $nome === '' || $email === ''){
+            http_response_code(400);
+            echo json_encode(['erro'=>'ID, nome e e-mail são obrigatórios']);
+            return;
+        }
+        if (!filter_var($email,FILTER_VALIDADE_EMAIL)){
+            http_response_code(400);
+            echo json_encode(['erro'=>'E-mail inválido']);
+            return;
+        }
+
+        if(!in_array($perfil, ['admin','atendente','aluno'], true)){
+            http_response_code(400);
+            echo json_encode(['erro'=>'Perfil inválido']);
+            return;
+        }
+
+        if(!in_array($status, ['ativo','inativo'],true)){
+            http_response_code(400);
+            echo json_encode(['erro'=>'Status inválido']);
+            return;
+        }
+
+        try {
+            $sql = 'UPDATE usuarios SET nome = :nome,
+                                        email = :email,
+                                        perfil = :perfil,
+                                        status = :status
+                                    WHERE id =: id';
+
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(':nome',$nome);
+            $stmt->bindValue(':email',$email);
+            $stmt->bindValue(':perfil',$perfil);
+            $stmt->bindValue(':status',$status);
+            $stmt->bindValue(':id',$id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            echo json_encode(['mensagem'=> 'Usuário atualizado com sucesso.'],JSON_UNESCAPED_UNICODE);
+        } catch(PDOException $e) {
+            http_response_code(500);
+            echo json_encode(['erro'=>'Erro ao atualizar usuário.']);
+        }
     }
 
+    public function excluir(): void
+    {
+        header('Content-Type: applications/json; charset=utf-8');
+
+        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDADE_INT);
+
+        if(!$id) {
+            http_response_code(400);
+            echo json_encode(['erro'=> 'ID inválido']);
+            return;
+        }
+        try {
+            $sql = 'DELETE FROM usuarios WHERE id = :id';
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            echo json_encode(['mensagem'=>'Usuário excluído com sucesso;'],JSON_UNESCAPED_UNICODE);
+        } catch (PDOException $e) {
+            http_response_code(500);
+            echo json_encode(['erro'=>'Erro ao excluir usuário1']);
+        }
+    }
 }
