@@ -17,7 +17,7 @@ class UsuarioController
         
         $stmt = $this->pdo->query($sql);
         $usuarios = $stmt->fetchALL(PDO::FETCH_ASSOC);
-        echo json_encode($usuarios.JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        echo json_encode($usuarios,JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 
     public function buscarPorId(): void
@@ -94,11 +94,11 @@ class UsuarioController
                     VALUES (:nome, :email, :senha, :perfil, :status)';
                 
             $stmt = $this->pdo->prepare($sql);
-            stmt->bindValue(':nome',$nome);
-            stmt->bindValue(':email',$email);
-            stmt->bindValue(':senha',$senhaHash);
-            stmt->bindValue(':perfil',$perfil);
-            stmt->bindValue(':status',$status);
+            $stmt->bindValue(':nome',$nome);
+            $stmt->bindValue(':email',$email);
+            $stmt->bindValue(':senha',$senhaHash);
+            $stmt->bindValue(':perfil',$perfil);
+            $stmt->bindValue(':status',$status);
             $stmt->execute();
 
             http_response_code(201);
