@@ -187,7 +187,7 @@ class UsuariosController
             echo json_encode(['mensagem'=>'Usuário excluído com sucesso;'],JSON_UNESCAPED_UNICODE);
         } catch (PDOException $e) {
             http_response_code(500);
-            echo json_encode(['erro'=>'Erro ao excluir usuário1']);
+            echo json_encode([$e . 'erro'=>'Erro ao excluir usuário']);
         }
     }
 
