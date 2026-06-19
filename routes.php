@@ -1,13 +1,47 @@
 <?php
+
+require_once __DIR__ . '/app/Controllers/AuthController.php';
 require_once __DIR__ . '/app/Controllers/UsuariosController.php';
+require_once __DIR__ . '/app/Middleware/auth.php';
 
 $controller = $_GET['controller'] ?? 'home';
 $action = $_GET['action'] ?? 'index';
 
-if ($controller === "usuarios") {
-    $usuariosController = new UsuariosController();
 
-    switch ($action){
+switch ($controller) {
+    case 'auth';
+        $authcontroller = new AuthController();
+
+        switch($action) {
+            case 'login':
+            $authController->exibirLogin();
+            break;
+
+            case 'entrar':
+            $authController->entrar();
+            break;
+
+            case 'dashboard':
+            $authController->dashboard();
+            break;
+
+            case 'logout':
+            $authController->logout();
+            break;
+
+            default:
+                http_response_code(404);
+                echo 'Ação de autenticação não encontrada.';
+
+        }
+
+        break;
+    
+    case 'usuarios':
+        exigirAutenticacao();
+        $usuariosController = new UsuariosController();
+        
+        switch ($action){
         case 'listar':
             $usuariosController->listar();
             break;
@@ -26,10 +60,8 @@ if ($controller === "usuarios") {
             break;
         
         default:
-        echo 'Ação de usuários não encontrada.';
-        break;
-    }
-} else{
-    echo '<h1>AtendeLab</h1>';
-    echo '<p>Projeto em execução. Use ?controller=usuario&action=listar para testar. </p>';
+        http_response_code(404);
+        echo 'Controller não encontrado';
+        
+        } 
 }

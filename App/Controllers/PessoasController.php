@@ -1,6 +1,6 @@
 <?php 
 
-class PessoasController.php
+class PessoasController
 {
     private PDO $pdo;
     public function __construct()
@@ -33,14 +33,14 @@ class PessoasController.php
         $id = filter_input(INPUT_GET,'id',FILTER_VALIDATE_INT);
 
         if(!$id){
-            $THIS->JSON(['erro'=>'ID inválido'],400);
+            $this->JSON(['erro'=>'ID inválido'],400);
             return;
         }
 
-        $stmt = $this->pdo->prepare($sql
+        $stmt = $this->pdo->prepare(
         $sql = 'SELECT id, nome, documento, telefone, email,
                 curso, periodo, status, observacoes
-                FROM pessoas WHERE id = :id';
+                FROM pessoas WHERE id = :id'
         );
         
         $stmt->execute(['id'=> $id]);
@@ -153,11 +153,11 @@ class PessoasController.php
             return;
         }
 
-        $stmt = $this->pdo->preapre(
+        $stmt = $this->pdo->prepare(
             "UPDATE pessoas SET status = 'inativo' WHERE id = :id" 
         );
         $stmt->execute(['id'=>$id]);
-        $this->json(['mensagem'=>] "Pessoa inativada com sucesso")
+        $this->json(['mensagem'=> "Pessoa inativada com sucesso"]);
     }
 
-    }
+}
