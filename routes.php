@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/app/Controllers/AuthController.php';
-require_once __DIR__ . '/app/Controllers/UsuariosController.php';
-require_once __DIR__ . '/app/Middleware/auth.php';
+require_once __DIR__ . '/App/Controllers/AuthController.php';
+require_once __DIR__ . '/App/Controllers/UsuariosController.php';
+require_once __DIR__ . '/App/Middleware/auth.php';
 
 $controller = $_GET['controller'] ?? 'home';
 $action = $_GET['action'] ?? 'index';
@@ -10,7 +10,7 @@ $action = $_GET['action'] ?? 'index';
 
 switch ($controller) {
     case 'auth';
-        $authcontroller = new AuthController();
+        $authController = new AuthController();
 
         switch($action) {
             case 'login':
