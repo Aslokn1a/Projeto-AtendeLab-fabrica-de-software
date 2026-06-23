@@ -54,6 +54,8 @@
                                 <label for="senha" class="form-label">
                                     Senha
                                 </label>
+
+                                <input type="senha" name="senha" id="senha" class="form-control" required>
                             </div>
 
                             <button type="submit" class="btn btn-primary w-100">
