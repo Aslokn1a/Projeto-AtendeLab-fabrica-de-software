@@ -22,7 +22,7 @@ class AuthController
 
 
         if (usuarioAutenticado()) {
-            header('Location : ?controller=auth&action=dashboard');
+            header('Location: ?controller=auth&action=dashboard');
             exit;
         }
 
@@ -38,7 +38,7 @@ class AuthController
     public function entrar(): void
     {
        if($_SERVER['REQUEST_METHOD'] !== 'POST'){
-            header('Location: ?controller=auth&action=login ');
+            header('Location: ?controller=auth&action=login');
             exit;
         }
 
@@ -129,7 +129,7 @@ class AuthController
 
         session_start();
 
-        $_SESSOIN['mensagem'] = 'Sessão encerrada com sucesso.';
+        $_SESSION['mensagem'] = 'Sessão encerrada com sucesso.';
 
         header('Location: ?controller=auth&action=login');
         exit;

@@ -19,7 +19,7 @@ function exigirAutenticacao(): void
             'Faça login para acessar a área restrita.';
 
         header('Location: ?controller=auth&action=login');
-        exit();
+        exit;
     }
     
 }

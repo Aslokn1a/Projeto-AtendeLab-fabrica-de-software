@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Generation Time: Jun 16, 2026 at 01:34 AM
+-- Generation Time: Jun 24, 2026 at 01:29 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.1.25
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -118,7 +118,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `perfil`, `status`, `criado_em`, `atualizado_em`) VALUES
-(1, 'Administrador', 'admin@atendelab.com', '$2y$10$J9P2kU2BAMZ3TZcuxTsW4e1D/lka8EocYHzvyoOZmCNcWDQz3RuVC', 'admin', 'ativo', '2026-06-10 22:47:33', '2026-06-15 22:37:09'),
+(1, 'Administrador', 'admin@atendelab.com', '$2y$10$q7TDgyzrjr55l1fHgJnYiuR7748mmT46NI30i4I10fVn4j/K2CPEq', 'admin', 'ativo', '2026-06-10 22:47:33', '2026-06-23 23:28:05'),
 (3, 'Jorge Atualizado', 'jorge@atendente.com', '$2y$10$q7TDgyzrjr55l1fHgJnYiuR7748mmT46NI30i4I10fVn4j/K2CPEq', 'atendente', 'ativo', '2026-06-10 22:56:20', '2026-06-15 22:37:09');
 
 --
