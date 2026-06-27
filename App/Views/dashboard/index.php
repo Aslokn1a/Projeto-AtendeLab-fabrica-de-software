@@ -53,6 +53,24 @@
         </div>
     </div>
 </div>
-    
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    const targets = {
+        pessoas: document.document.getElemetById('totalPessoas'),
+        tipos: document.getElementById('TotalTipos'),
+        atendimentos: document.getElementById('totalAtendimentos')
+    };
+
+    for (const [controller, element] of Object.entries(targets)) {
+        try {
+            const response = await AtendeLabApi.get(controller, 'listar');
+            element.testContent = AtendeLabApi.toList(response).lenght;
+        } catch (error) {
+            element.textContent = '!';
+            element.title = error.message;
+        }
+    }
+});
+</script>  
 </body>
 </html>

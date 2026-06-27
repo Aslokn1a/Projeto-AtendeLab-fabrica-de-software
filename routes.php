@@ -3,12 +3,69 @@
 require_once __DIR__ . '/app/Controllers/AuthController.php';
 require_once __DIR__ . '/app/Controllers/UsuariosController.php';
 require_once __DIR__ . '/app/Middleware/auth.php';
+require_once __DIR__ . '/app/Controllers/TiposAtendimentosController.php';
+require_once __DIR__ . '/app/Controllers/AtendimentosController.php';
 
 $controller = $_GET['controller'] ?? 'auth';
 $action = $_GET['action'] ?? 'login';
 
 
 switch ($controller) {
+    case 'tipos':
+        exigirAutenticacao();
+        
+        $tiposController = new TiposAtendimentosController();
+
+        switch ($action) {
+            case 'listar':
+                $tiposController->listar();
+                break;
+            case 'buscarPorId':
+                $tiposController->buscarPorId();
+                break;
+            case 'criar':
+                $tiposController->criar();
+                break;
+            case 'atualizar':
+                $tiposController->atualizar();
+                break;
+            case 'inativar':
+                $tiposController->inativar();
+                break;
+            default:
+            responderRotaNaoEncontrada('Ação de tipos de atendimento não encontrada');
+
+        }
+        break;
+
+    
+    case 'atendimentos':
+        exigirAutenticacao();
+        
+        $atendimentosController = new AtendimentosController();
+
+        switch ($action) {
+            case 'listar':
+                $atendimentosController->listar();
+                break;
+            case 'visualizar':
+                $atendimentosController->visualizar();
+                break;
+            case 'criar':
+                $atendimentosController->criar();
+                break;
+            case 'alterarStatus':
+                $atendimentosController->alterarStatus();
+                break;
+            case 'opcoesFormulario':
+                $atendimentosController->opcoesFormulario();
+                break;
+            default:
+            responderRotaNaoEncontrada('Ação de atendimento não encontrada');
+
+        }
+        break;
+
     case 'auth':
         $authController = new AuthController();
 
@@ -66,4 +123,5 @@ switch ($controller) {
     default:
         http_response_code(404);
         echo 'Controller não encontrado';
+
 }

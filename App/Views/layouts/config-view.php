@@ -1,0 +1,2 @@
+<?php
+$baseURL = 'atendelab/public/';

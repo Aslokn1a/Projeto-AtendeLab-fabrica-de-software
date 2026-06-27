@@ -31,10 +31,10 @@ class AtendimentosController
                         ON t.id = a.id_tipo_atendimento
                     INNER JOIN usuarios u ON u.id = a.id_usuario
                     ORDER BY a.id DESC';
-                $this->json($this->pdo->query($sql)->fetchALL(PDO:FETCH_ASSOC));                
+                $this->json($this->pdo->query($sql)->fetchALL(PDO::FETCH_ASSOC));                
     }
 
-    public function buscar: void
+    public function buscar(): void
     {
         $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         if (!$id) {
@@ -53,7 +53,7 @@ class AtendimentosController
             WHERE a.id = :id'
         );
         $stmt->execute(['id' => $id]);
-        $atendimento = $stmt -> tech(PDO::FETCH_ASSOC);
+        $atendimento = $stmt -> fetch(PDO::FETCH_ASSOC);
 
         if (!$atendimento) {
             $this->json(['erro' => 'Atendimento não encontrado.'], 404);
@@ -62,7 +62,7 @@ class AtendimentosController
         $this->json($atendimento);
     }
 
-    public functino criar(): void
+    public function criar(): void
     {
         $pessoaID = filter_var(
             $_POST['id_pessoa'] ?? null,
@@ -82,7 +82,7 @@ class AtendimentosController
         $status = $_POST['status'] ?? 'aberto';
         
         if(!$pessoaID || !$tipoId || !$usuarioId ||
-            $descricao === '' $data ==='' || $horario '') {
+            $descricao === '' || $data ==='' || $horario === '') {
                 $this->json(['erro' => 'Preencha os campos obrigatórios.'], 422);
                 return;
         }
@@ -91,7 +91,7 @@ class AtendimentosController
             return;
         }
 
-        $stmt = $this->pdo-prepare(
+        $stmt = $this->pdo->prepare(
             'INSERT INTO atendimentos 
             (id_pessoa, id_tipo_atendimento, id_usuario, descricao, 
             status, data_atendimento, horario_atendimento
@@ -110,4 +110,38 @@ class AtendimentosController
         ]);
         $this->json(['mensagem' => 'Atendimento resgitrado com sucesso.'], 201);
     }
+
+    public function alterarStatus(): void
+    {
+        $id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT);
+        $status = $_POST['status'] ?? '';
+        $observacao = trim($_POST['observacao_final'] ?? '');
+
+        if (!$id || !in_array(
+            $status,
+            ['aberto','em_andamento', 'concluido'],
+            true
+        )) {
+            $this->json(['erro' => 'ID ou status inválido'], 422);
+            return;
+        }
+        if ($status === 'concluido' && $observacao === '') {
+            $this->json([
+                'erro' => 'Informe a observação final para concluir'
+            ], 422);
+            return;
+        }
+
+        $stmt = $this->pdo->prepare(
+            'UPDATE atendimentos 
+            SET status =:status, observacao_final = :observacao
+            WHERE id = :id'
+        );
+        $stmt->execute([
+            'id' => $id,
+            'status' => $status,
+            'observacoes' => $observacao !== '' ? $observacao :null,
+        ]);
+        $this->json(['mensagem'=> 'Status atualizado com sucesso.']);
+    }   
 }

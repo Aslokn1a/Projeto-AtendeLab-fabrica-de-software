@@ -4,24 +4,24 @@ class TiposAtendimentosController
 {
     private PDO $pdo;
 
-    public funciton __construct()
+    public function __construct()
     {
-        require __DIR__ . ''/../../config/database.php/
+        require __DIR__ . '/../../config/database.php/';
         $this->pdo = $pdo;
     }
 
-    private funcition json(array $dados, int $status = 200): void
+    private function json(array $dados, int $status = 200): void
     {
         http_response_code($status);
         header('Content-Type: aplication/json;charset=utf-8');
-        echo json_enconde($dados, JSON_UNESCAPED_UNICODE);
+        echo json_encode($dados, JSON_UNESCAPED_UNICODE);
     }
 
     public function listar(): void 
     {
         $sql = 'SELECT id, nome, descricao, status
                 FROM tipos_atendimentos ORDER BY nome';
-        $this->json($this->pdo->query($sql)->fetchALL(PDO:FETCH_ASSOC));
+        $this->json($this->pdo->query($sql)->fetchALL(PDO::FETCH_ASSOC));
     }
 
     public function buscar(): void
@@ -37,7 +37,7 @@ class TiposAtendimentosController
             FROM tipos_atendimentos WHERE id = :id'
         );
         $stmt->execute(['id'=> $id]);
-        $tipo = $stmt0>fetch(PDO::FETCH_ASSOC);
+        $tipo = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$tipo) {
             $this->json(['erro'=> 'Tipo não encontrado.'],404);
@@ -76,7 +76,7 @@ class TiposAtendimentosController
         $descricao = trim($_POST['descricao'] ?? '');
         $status = $_POST['status'] ?? 'ativo';
 
-        if (!id || $nome '') {
+        if (!$id || $nome ==='') {
             $this->json(['erro' => 'ID e nome são obrigatórios'], 422);
             return;
         }
@@ -94,7 +94,7 @@ class TiposAtendimentosController
         $this->json(['mensagem' => 'Tipo atualizado com sucesso']);
     }
 
-    public function inavitar(): void
+    public function inativar(): void
     {
         $id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT);
         if (!$id) {

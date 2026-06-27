@@ -47,7 +47,7 @@
                                     E-mail
                                 </label>
 
-                                <input type="email" name="email" id="email" class="form-control" required>
+                                <input type="email" name="email" id="email" class="form-control" required autofocus>
                             </div>
 
                             <div class="mb-3">
@@ -58,7 +58,7 @@
                                 <input type="password" name="senha" id="senha" class="form-control" required>
                             </div>
 
-                            <button type="submit" class="btn btn-primary w-100">
+                            <button type="submit" class="btn btn-success w-100">
                                 Entrar
                             </button>
 
