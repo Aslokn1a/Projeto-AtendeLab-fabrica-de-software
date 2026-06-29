@@ -64,7 +64,7 @@ class AtendimentosController
 
     public function criar(): void
     {
-        $pessoaID = filter_var(
+        $pessoaId = filter_var(
             $_POST['pessoa_id'] ?? null,
             FILTER_VALIDATE_INT
         );
@@ -82,7 +82,7 @@ class AtendimentosController
         $status = $_POST['status'] ?? 'aberto';
 
         if (
-            !$pessoaID || !$tipoId || !$usuarioId ||
+            !$pessoaId || !$tipoId || !$usuarioId ||
             $descricao === '' || $data === '' || $horario === ''
         ) {
             $this->json(['erro' => 'Preencha os campos obrigatórios.'], 422);
@@ -102,7 +102,7 @@ class AtendimentosController
             :status,:data_atendimento, :horario_atendimento)'
         );
         $stmt->execute([
-            'pessoa_id' => $pessoaID,
+            'pessoa_id' => $pessoaId,
             'tipo_atendimento_id' => $tipoId,
             'usuario_id' => $usuarioId,
             'descricao' => $descricao,
@@ -142,7 +142,7 @@ class AtendimentosController
         $stmt->execute([
             'id' => $id,
             'status' => $status,
-            'observacoes' => $observacao !== '' ? $observacao : null,
+            'observacao' => $observacao !== '' ? $observacao : null,
         ]);
         $this->json(['mensagem' => 'Status atualizado com sucesso.']);
     }

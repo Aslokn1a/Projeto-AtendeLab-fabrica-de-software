@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Tempo de geração: 30/06/2026 às 00:30
+-- Tempo de geração: 30/06/2026 às 01:26
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.1.25
 
@@ -57,13 +57,13 @@ CREATE TABLE `pessoas` (
   `id` int(11) NOT NULL,
   `nome` varchar(100) NOT NULL,
   `documento` varchar(20) NOT NULL,
-  `email` varchar(100) NOT NULL,
   `telefone` varchar(20) NOT NULL,
+  `email` varchar(100) NOT NULL,
   `curso` varchar(100) NOT NULL,
   `periodo` varchar(100) NOT NULL,
   `status` enum('ativo','inativo') NOT NULL DEFAULT 'ativo',
-  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
   `observacoes` text DEFAULT NULL,
+  `criado_em` timestamp NOT NULL DEFAULT current_timestamp(),
   `atualizado_em` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -71,9 +71,10 @@ CREATE TABLE `pessoas` (
 -- Despejando dados para a tabela `pessoas`
 --
 
-INSERT INTO `pessoas` (`id`, `nome`, `documento`, `email`, `telefone`, `curso`, `periodo`, `status`, `criado_em`, `observacoes`, `atualizado_em`) VALUES
-(1, 'Matheus', 'documento', 'matheus@gmail.com', '+55 (47)11223-4456', 'engenharia de software', '5º Semestre', 'ativo', '2026-06-10 22:47:33', NULL, '2026-06-15 22:37:09'),
-(2, 'Guilherme Rafael de Jesus', '123456789', 'guilherme@gmail.com', '47999999999', 'engenharia de software', '5º Semestre', 'ativo', '2026-06-29 22:06:14', 'a', '2026-06-29 22:07:01');
+INSERT INTO `pessoas` (`id`, `nome`, `documento`, `telefone`, `email`, `curso`, `periodo`, `status`, `observacoes`, `criado_em`, `atualizado_em`) VALUES
+(1, 'Matheus', 'documento', '+55 (47)11223-4456', 'matheus@gmail.com', 'engenharia de software', '5º Semestre', 'ativo', NULL, '2026-06-10 22:47:33', '2026-06-15 22:37:09'),
+(2, 'Guilherme Rafael de Jesus', '123456789', '47999999999', 'guilherme@gmail.com', 'engenharia de software', '5º Semestre', 'ativo', 'a', '2026-06-29 22:06:14', '2026-06-29 22:07:01'),
+(3, 'Thiago', '123456', '47999999999', 'thiago@gmail.com', 'engenharia de software', '5º Semestre', 'ativo', 'a', '2026-06-29 23:21:08', '2026-06-29 23:21:08');
 
 -- --------------------------------------------------------
 
@@ -170,7 +171,7 @@ ALTER TABLE `atendimentos`
 -- AUTO_INCREMENT de tabela `pessoas`
 --
 ALTER TABLE `pessoas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `tipos_atendimento`

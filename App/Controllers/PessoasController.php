@@ -147,6 +147,7 @@ class PessoasController
             ));
             $this->json(['mensagem' => "Pessoa atualizada com sucesso"]);
         } catch (PDOException $e) {
+            echo($e);
             $this->json(['erro' => 'Não foi possível atualizar a pessoa'], 400);
         }
     }
