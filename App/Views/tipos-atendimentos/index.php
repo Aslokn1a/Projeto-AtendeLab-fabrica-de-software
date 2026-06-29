@@ -172,31 +172,27 @@
     formTipo.addEventListener('submit', async (event) => {
         event.preventDefault();
         const id = campoTipoId.value;
-        const acao = id
-        ? 'atualizar'
-        : 'criar';
-        const mensagemSucesso = id
-        ? 'Tipo atualizado com sucesso.'
-        : 'Tipo cadastrado com sucesso.';
+        const acao = id ? 'atualizar': 'criar';
+        const mensagemSucesso = id ? 'Tipo atualizado com sucesso.': 'Tipo cadastrado com sucesso.';
         try {
-        await AtendeLabApi.post(
-        'tipos',
-        acao,
-        new FormData(formTipo)
-        );
-        AtendeLabApi.showAlert(
-        'alerta',
-        mensagemSucesso,
-        'success'
-        );
-        fecharFormulario();
-        await carregarTipos();
+            await AtendeLabApi.post(
+            'tipos',
+            acao,
+            new FormData(formTipo)
+            );
+            AtendeLabApi.showAlert(
+            'alerta',
+            mensagemSucesso,
+            'success'
+            );
+            fecharFormulario();
+            await carregarTipos();
         } catch (error) {
-        AtendeLabApi.showAlert(
-        'alerta',
-        error.message,
-        'danger'
-        );
+            AtendeLabApi.showAlert(
+            'alerta',
+            error.message,
+            'danger'
+            );
         }
     });
     async function inativarTipo(id) {

@@ -119,13 +119,13 @@
  }
  async function editarPessoa(id) {
     try {
-    const p = AtendeLabApi.toObject(await AtendeLabApi.get('pessoas', 'buscar', {id}));
-    novaPessoa();
-    document.getElementById('tituloFormulario').textContent = 'Editar pessoa';
-    for (const [key, value] of Object.entries(p)) {
-        const field = formPessoa.elements.namedItem(key);
-        if (field) field.value = value ?? '';
-    }
+        const p = AtendeLabApi.toObject(await AtendeLabApi.get('pessoas', 'buscar', {id}));
+        novaPessoa();
+        document.getElementById('tituloFormulario').textContent = 'Editar pessoa';
+        for (const [key, value] of Object.entries(p)) {
+            const field = formPessoa.elements.namedItem(key);
+            if (field) field.value = value ?? '';
+        }
     } catch (error) { 
         AtendeLabApi.showAlert('alerta', error.message, 'danger'); 
     }

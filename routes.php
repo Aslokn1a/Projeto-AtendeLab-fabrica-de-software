@@ -42,7 +42,7 @@ switch ($controller) {
             case 'listar':
                 $tiposController->listar();
                 break;
-            case 'buscarPorId':
+            case 'buscar':
                 $tiposController->buscarPorId();
                 break;
             case 'criar':
@@ -69,7 +69,7 @@ switch ($controller) {
             case 'listar':
                 $PessoasController->listar();
                 break;
-            case 'buscarPorId':
+            case 'buscar':
                 $PessoasController->buscarPorId();
                 break;
             case 'criar':
@@ -98,17 +98,21 @@ switch ($controller) {
             case 'listar':
                 $atendimentosController->listar();
                 break;
+            /* 
             case 'visualizar':
                 $atendimentosController->visualizar();
                 break;
+            */
             case 'criar':
                 $atendimentosController->criar();
                 break;
             case 'alterarStatus':
                 $atendimentosController->alterarStatus();
                 break;
+            /*
             case 'opcoesFormulario':
                 $atendimentosController->opcoesFormulario();
+            */
                 break;
             default:
                 http_response_code(404);

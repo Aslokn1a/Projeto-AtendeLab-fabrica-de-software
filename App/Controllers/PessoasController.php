@@ -63,7 +63,7 @@ class PessoasController
         $curso = trim($_POST['curso'] ?? '');
         $periodo = trim($_POST['periodo'] ?? '');
         $status = $_POST['status'] ?? 'ativo';
-        $perfil = trim($_POST['observacoes'] ?? '');
+        $observacoes = trim($_POST['observacoes'] ?? '');
 
 
 
@@ -85,7 +85,7 @@ class PessoasController
         try {
             $stmt = $this->pdo->prepare(
                 'INSERT INTO pessoas 
-            (nome,documento, telefone, email, curso, periodo, 
+                (nome,documento, telefone, email, curso, periodo, 
                 status, observacoes)
             VALUES
             (:nome, :documento, :telefone, :email, :curso, 
@@ -99,7 +99,7 @@ class PessoasController
                 'curso',
                 'periodo',
                 'status',
-                'observacoes'
+                'observacoes',
             ));
             $this->json(['mensagem' => 'Pessoa cadastrada com sucesso.'], 201);
         } catch (PDOException $e) {
@@ -119,7 +119,7 @@ class PessoasController
         $status = $_POST['status'] ?? 'ativo';
         $observacoes = trim($_POST['observacoes'] ?? '');
 
-        if ($nome === '' || $documento === '' || $email === '') {
+        if (!$id || $nome === '' || $documento === '' || $email === '') {
             $this->json(['erro' => 'Dados obrigatórios ausentes.'], 422);
             return;
         }
@@ -141,16 +141,9 @@ class PessoasController
                 periodo = :periodo, status = :status,
                 observacoes = :observacoes WHERE id = :id'
             );
-            $stmt->execute(compact(
-                'id',
-                'nome',
-                'documento',
-                'telefone',
-                'email',
-                'curso',
-                'periodo',
-                'status',
-                'observacoes'
+            $stmt->execute(compact( 
+                'id','nome','documento','telefone','email','curso',
+                'periodo','status','observacoes'
             ));
             $this->json(['mensagem' => "Pessoa atualizada com sucesso"]);
         } catch (PDOException $e) {

@@ -20,7 +20,7 @@ class TiposAtendimentosController
     public function listar(): void
     {
         $sql = 'SELECT id, nome, descricao, status
-                FROM tipos_atendimentos ORDER BY nome';
+                FROM tipos_atendimento ORDER BY nome';
         $this->json($this->pdo->query($sql)->fetchALL(PDO::FETCH_ASSOC));
     }
 
@@ -34,7 +34,7 @@ class TiposAtendimentosController
 
         $stmt = $this->pdo->prepare(
             'SELECT id, nome, descricao, status
-            FROM tipos_atendimentos WHERE id = :id'
+            FROM tipos_atendimento WHERE id = :id'
         );
         $stmt->execute(['id' => $id]);
         $tipo = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -62,7 +62,7 @@ class TiposAtendimentosController
         }
 
         $stmt = $this->pdo->prepare(
-            'INSERT INTO tipos_atendimentos (nome, descricao, status)
+            'INSERT INTO tipos_atendimento (nome, descricao, status)
             VALUES (:nome, :descricao, :status)'
         );
         $stmt->execute(compact('nome', 'descricao', 'status'));
@@ -80,13 +80,13 @@ class TiposAtendimentosController
             $this->json(['erro' => 'ID e nome são obrigatórios'], 422);
             return;
         }
-        if (!in_array($status, ['ativo,inativo'], true)) {
+        if (!in_array($status, ['ativo','inativo'], true)) {
             $this->json(['erro' => 'Status inválido'], 422);
             return;
         }
 
         $stmt = $this->pdo->prepare(
-            'UPDATE tipos_atendimentos 
+            'UPDATE tipos_atendimento 
             SET nome = :nome, descricao = :descricao, status = :status
             WHERE id = :id'
         );
@@ -103,7 +103,7 @@ class TiposAtendimentosController
         }
 
         $stmt = $this->pdo->prepare(
-            "UPDATE tipos_atendimentos SET status = 'inativo' WHERE id = :id"
+            "UPDATE tipos_atendimento SET status = 'inativo' WHERE id = :id"
         );
         $stmt->execute(['id' => $id]);
         $this->json(['mensagem' => 'Tipo inativado com sucesso']);

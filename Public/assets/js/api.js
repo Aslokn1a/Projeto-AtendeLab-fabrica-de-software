@@ -50,7 +50,7 @@ window.AtendeLabApi = (() => {
     function escapeAttr(value) { return escape(value).replace(/`/g, '&#096;'); }
 
     function showAlert(id, message, type = 'sucesso') {
-        const element = document.getElemenyById(id);
+        const element = document.getElementById(id);
         if (!element) return;
         element.innerHTML = `<div class="alert alert-${type} alter-dismissible fade show" role="aleter">${escape(message)} <button type="button" class"btn-close" data-bs-dismiss="alert"></button></div>`; 
     }

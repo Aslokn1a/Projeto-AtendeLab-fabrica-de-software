@@ -23,13 +23,13 @@ class AtendimentosController
                     t.nome AS tipo_nome,
                     u.nome AS responsavel_nome,
                     a.descricao, a.status,
-                    a.data_atendimento. a.horario_atendimento,
+                    a.data_atendimento, a.hora_atendimento,
                     a.observacao_final
                     FROM atendimentos a
-                    INNSER JOIN pessoas p ON p.id = a.id_pessoa
-                    INNER JOIN tipos_atendimentos t 
-                        ON t.id = a.id_tipo_atendimento
-                    INNER JOIN usuarios u ON u.id = a.id_usuario
+                    INNER JOIN pessoas p ON p.id = a.pessoa_id
+                    INNER JOIN tipos_atendimento t 
+                        ON t.id = a.tipo_atendimento_id
+                    INNER JOIN usuarios u ON u.id = a.usuario_id
                     ORDER BY a.id DESC';
         $this->json($this->pdo->query($sql)->fetchALL(PDO::FETCH_ASSOC));
     }
@@ -48,8 +48,8 @@ class AtendimentosController
             FROM atendimentos a 
             INNER JOIN pessoas p ON p.id = a.id_pessoa
             INNER JOIN tipos_atendimentos t 
-                ON t.id = a.id_tipo_atendimento
-            INNER JOIN usuarios u ON u.id = a.id_usuario
+                ON t.id = a.tipo_atendimento_id
+            INNER JOIN usuarios u ON u.id = a.usuario_id
             WHERE a.id = :id'
         );
         $stmt->execute(['id' => $id]);
@@ -65,15 +65,15 @@ class AtendimentosController
     public function criar(): void
     {
         $pessoaID = filter_var(
-            $_POST['id_pessoa'] ?? null,
+            $_POST['pessoa_id'] ?? null,
             FILTER_VALIDATE_INT
         );
         $tipoId = filter_var(
-            $_POST['id_tipo_atendimento'] ?? null,
+            $_POST['tipo_atendimento_id'] ?? null,
             FILTER_VALIDATE_INT
         );
         $usuarioId = filter_var(
-            $_POST['id_usuario'] ?? null,
+            $_POST['usuario_id'] ?? null,
             FILTER_VALIDATE_INT
         );
         $descricao = trim($_POST['descricao'] ?? '');
@@ -95,16 +95,16 @@ class AtendimentosController
 
         $stmt = $this->pdo->prepare(
             'INSERT INTO atendimentos 
-            (id_pessoa, id_tipo_atendimento, id_usuario, descricao, 
+            (pessoa_id, tipo_atendimento_id, usuario_id, descricao, 
             status, data_atendimento, horario_atendimento
             VALUES 
-            (:id_pessoa, :id_tipo_atendimento, :id_usuario, :descricao
+            (:pessoa_id, :tipo_atendimento_id, :usuario_id, :descricao
             :status,:data_atendimento, :horario_atendimento)'
         );
         $stmt->execute([
-            'id_pessoa' => $pessoaID,
-            'id_tipo_atendimento' => $tipoId,
-            'id_usuario' => $usuarioId,
+            'pessoa_id' => $pessoaID,
+            'tipo_atendimento_id' => $tipoId,
+            'usuario_id' => $usuarioId,
             'descricao' => $descricao,
             'status' => $status,
             'data_atendimento' => $data,
@@ -119,15 +119,13 @@ class AtendimentosController
         $status = $_POST['status'] ?? '';
         $observacao = trim($_POST['observacao_final'] ?? '');
 
-        if (
-            !$id || !in_array(
+        if (!$id || !in_array(
                 $status,
                 ['aberto', 'em_andamento', 'concluido'],
                 true
-            )
-        ) {
-            $this->json(['erro' => 'ID ou status inválido'], 422);
-            return;
+            )) {
+                $this->json(['erro' => 'ID ou status inválido'], 422);
+                return;
         }
         if ($status === 'concluido' && $observacao === '') {
             $this->json([
@@ -138,7 +136,7 @@ class AtendimentosController
 
         $stmt = $this->pdo->prepare(
             'UPDATE atendimentos 
-            SET status =:status, observacao_final = :observacao
+            SET status = :status, observacao_final = :observacao
             WHERE id = :id'
         );
         $stmt->execute([

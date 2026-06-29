@@ -26,7 +26,7 @@
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
         <div class="container">
-            <a class="navbar-brand fw-semibold" href="<?=$baseUrl?>?controller=auth&action=dashboard">
+            <a class="navbar-brand fw-semibold" href="?controller=auth&action=dashboard">
             AtendeLab
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
