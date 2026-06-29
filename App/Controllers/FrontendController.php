@@ -1,10 +1,11 @@
-<?php 
+<?php
 
 class FrontendController
 {
     private PDO $pdo;
 
-    public function __construct(){
+    public function __construct()
+    {
         require __DIR__ . '/../../Config/database.php';
         $this->pdo = $pdo;
     }

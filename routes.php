@@ -17,7 +17,7 @@ switch ($controller) {
         exigirAutenticacao();
 
         $frontendController = new FrontendController();
-        switch($action){
+        switch ($action) {
             case 'pessoas':
                 $frontendController->pessoas();
                 break;
@@ -35,7 +35,7 @@ switch ($controller) {
         break;
     case 'tipos':
         exigirAutenticacao();
-        
+
         $tiposController = new TiposAtendimentosController();
 
         switch ($action) {
@@ -62,7 +62,7 @@ switch ($controller) {
         break;
     case 'pessoas':
         exigirAutenticacao();
-        
+
         $PessoasController = new PessoasController();
 
         switch ($action) {
@@ -88,10 +88,10 @@ switch ($controller) {
         }
         break;
 
-    
+
     case 'atendimentos':
         exigirAutenticacao();
-        
+
         $atendimentosController = new AtendimentosController();
 
         switch ($action) {
@@ -120,22 +120,22 @@ switch ($controller) {
     case 'auth':
         $authController = new AuthController();
 
-        switch($action) {
+        switch ($action) {
             case 'login':
-            $authController->exibirLogin();
-            break;
+                $authController->exibirLogin();
+                break;
 
             case 'entrar':
-            $authController->entrar();
-            break;
+                $authController->entrar();
+                break;
 
             case 'dashboard':
-            $authController->dashboard();
-            break;
+                $authController->dashboard();
+                break;
 
             case 'logout':
-            $authController->logout();
-            break;
+                $authController->logout();
+                break;
 
             default:
                 http_response_code(404);
@@ -144,12 +144,12 @@ switch ($controller) {
         }
 
         break;
-    
+
     case 'usuarios':
         exigirAutenticacao();
         $usuariosController = new UsuariosController();
-        
-        switch ($action){
+
+        switch ($action) {
             case 'listar':
                 $usuariosController->listar();
                 break;
@@ -169,7 +169,7 @@ switch ($controller) {
             default:
                 http_response_code(404);
                 echo 'Ação de usuarios não encontrada';
-        } 
+        }
         break;
     default:
         http_response_code(404);

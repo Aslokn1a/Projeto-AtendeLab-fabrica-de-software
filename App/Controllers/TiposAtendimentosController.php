@@ -1,6 +1,6 @@
 <?php
 
-class TiposAtendimentosController 
+class TiposAtendimentosController
 {
     private PDO $pdo;
 
@@ -17,7 +17,7 @@ class TiposAtendimentosController
         echo json_encode($dados, JSON_UNESCAPED_UNICODE);
     }
 
-    public function listar(): void 
+    public function listar(): void
     {
         $sql = 'SELECT id, nome, descricao, status
                 FROM tipos_atendimentos ORDER BY nome';
@@ -27,8 +27,8 @@ class TiposAtendimentosController
     public function buscarPorId(): void
     {
         $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        if (!$id){
-            $this->json(['erro'=>'ID inválido'],400);
+        if (!$id) {
+            $this->json(['erro' => 'ID inválido'], 400);
             return;
         }
 
@@ -36,11 +36,11 @@ class TiposAtendimentosController
             'SELECT id, nome, descricao, status
             FROM tipos_atendimentos WHERE id = :id'
         );
-        $stmt->execute(['id'=> $id]);
+        $stmt->execute(['id' => $id]);
         $tipo = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$tipo) {
-            $this->json(['erro'=> 'Tipo não encontrado.'],404);
+            $this->json(['erro' => 'Tipo não encontrado.'], 404);
             return;
         }
         $this->json($tipo);
@@ -52,11 +52,11 @@ class TiposAtendimentosController
         $descricao = trim($_POST['descricao'] ?? '');
         $status = $_POST['status'] ?? 'ativo';
 
-        if ($nome === ''){
-            $this->json(['erro' => 'Nome é obrigatório'],422);
+        if ($nome === '') {
+            $this->json(['erro' => 'Nome é obrigatório'], 422);
             return;
         }
-        if(!in_array($status, ['ativo', 'inativo'], true)) {
+        if (!in_array($status, ['ativo', 'inativo'], true)) {
             $this->json(['erro' => 'Status inválido.'], 422);
             return;
         }
@@ -65,7 +65,7 @@ class TiposAtendimentosController
             'INSERT INTO tipos_atendimentos (nome, descricao, status)
             VALUES (:nome, :descricao, :status)'
         );
-        $stmt->execute(compact('nome','descricao','status'));
+        $stmt->execute(compact('nome', 'descricao', 'status'));
         $this->json(['mensagem' => 'Tipo cadastrado com sucesso'], 201);
     }
 
@@ -76,7 +76,7 @@ class TiposAtendimentosController
         $descricao = trim($_POST['descricao'] ?? '');
         $status = $_POST['status'] ?? 'ativo';
 
-        if (!$id || $nome ==='') {
+        if (!$id || $nome === '') {
             $this->json(['erro' => 'ID e nome são obrigatórios'], 422);
             return;
         }
@@ -90,7 +90,7 @@ class TiposAtendimentosController
             SET nome = :nome, descricao = :descricao, status = :status
             WHERE id = :id'
         );
-        $stmt->execute(compact('id','nome','descricao','status'));
+        $stmt->execute(compact('id', 'nome', 'descricao', 'status'));
         $this->json(['mensagem' => 'Tipo atualizado com sucesso']);
     }
 

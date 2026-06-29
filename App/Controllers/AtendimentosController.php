@@ -1,6 +1,6 @@
 <?php
 
-class AtendimentosController 
+class AtendimentosController
 {
     private PDO $pdo;
 
@@ -31,7 +31,7 @@ class AtendimentosController
                         ON t.id = a.id_tipo_atendimento
                     INNER JOIN usuarios u ON u.id = a.id_usuario
                     ORDER BY a.id DESC';
-                $this->json($this->pdo->query($sql)->fetchALL(PDO::FETCH_ASSOC));                
+        $this->json($this->pdo->query($sql)->fetchALL(PDO::FETCH_ASSOC));
     }
 
     public function buscar(): void
@@ -53,7 +53,7 @@ class AtendimentosController
             WHERE a.id = :id'
         );
         $stmt->execute(['id' => $id]);
-        $atendimento = $stmt -> fetch(PDO::FETCH_ASSOC);
+        $atendimento = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$atendimento) {
             $this->json(['erro' => 'Atendimento não encontrado.'], 404);
@@ -80,13 +80,15 @@ class AtendimentosController
         $data = $_POST['data_atendimento'] ?? '';
         $horario = $_POST['horario_atendimento'] ?? '';
         $status = $_POST['status'] ?? 'aberto';
-        
-        if(!$pessoaID || !$tipoId || !$usuarioId ||
-            $descricao === '' || $data ==='' || $horario === '') {
-                $this->json(['erro' => 'Preencha os campos obrigatórios.'], 422);
-                return;
+
+        if (
+            !$pessoaID || !$tipoId || !$usuarioId ||
+            $descricao === '' || $data === '' || $horario === ''
+        ) {
+            $this->json(['erro' => 'Preencha os campos obrigatórios.'], 422);
+            return;
         }
-        if(!in_array($status, ['aberto', 'em_andamento'], true)) {
+        if (!in_array($status, ['aberto', 'em_andamento'], true)) {
             $this->json(['erro' => 'Status inicial inválido'], 422);
             return;
         }
@@ -97,7 +99,7 @@ class AtendimentosController
             status, data_atendimento, horario_atendimento
             VALUES 
             (:id_pessoa, :id_tipo_atendimento, :id_usuario, :descricao
-            :status,:data_atendimento, :horario_atendimento)'    
+            :status,:data_atendimento, :horario_atendimento)'
         );
         $stmt->execute([
             'id_pessoa' => $pessoaID,
@@ -117,11 +119,13 @@ class AtendimentosController
         $status = $_POST['status'] ?? '';
         $observacao = trim($_POST['observacao_final'] ?? '');
 
-        if (!$id || !in_array(
-            $status,
-            ['aberto','em_andamento', 'concluido'],
-            true
-        )) {
+        if (
+            !$id || !in_array(
+                $status,
+                ['aberto', 'em_andamento', 'concluido'],
+                true
+            )
+        ) {
             $this->json(['erro' => 'ID ou status inválido'], 422);
             return;
         }
@@ -140,8 +144,8 @@ class AtendimentosController
         $stmt->execute([
             'id' => $id,
             'status' => $status,
-            'observacoes' => $observacao !== '' ? $observacao :null,
+            'observacoes' => $observacao !== '' ? $observacao : null,
         ]);
-        $this->json(['mensagem'=> 'Status atualizado com sucesso.']);
-    }   
+        $this->json(['mensagem' => 'Status atualizado com sucesso.']);
+    }
 }
