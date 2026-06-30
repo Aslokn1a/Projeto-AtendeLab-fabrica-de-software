@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3307
--- Tempo de geração: 30/06/2026 às 12:45
+-- Tempo de geração: 30/06/2026 às 01:26
 -- Versão do servidor: 10.4.32-MariaDB
--- Versão do PHP: 8.0.30
+-- Versão do PHP: 8.1.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,14 +29,14 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `atendimentos` (
   `id` int(11) NOT NULL,
-  `pessoa_id` int(11) NOT NULL,
   `tipo_atendimento_id` int(11) NOT NULL,
+  `pessoa_id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
-  `descricao` text NOT NULL,
-  `status` enum('aberto','em_andamento','concluido') DEFAULT 'aberto',
   `data_atendimento` date NOT NULL,
   `hora_atendimento` time NOT NULL,
+  `descricao` text NOT NULL,
   `observacao_final` text NOT NULL,
+  `status` enum('aberto','em_andamento','concluido') DEFAULT 'aberto',
   `criado_em` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -44,10 +44,8 @@ CREATE TABLE `atendimentos` (
 -- Despejando dados para a tabela `atendimentos`
 --
 
-INSERT INTO `atendimentos` (`id`, `pessoa_id`, `tipo_atendimento_id`, `usuario_id`, `descricao`, `status`, `data_atendimento`, `hora_atendimento`, `observacao_final`, `criado_em`) VALUES
-(1, 1, 1, 1, 'Solicitação de boletim escolar', 'concluido', '2026-06-09', '20:58:00', 'Concluido com sucesso', '2026-06-10 22:47:33'),
-(2, 2, 1, 1, 'a', 'aberto', '2026-06-18', '22:48:00', '', '2026-06-30 01:45:46'),
-(3, 3, 2, 1, 'a', 'em_andamento', '2026-07-01', '22:55:00', '', '2026-06-30 01:53:21');
+INSERT INTO `atendimentos` (`id`, `tipo_atendimento_id`, `pessoa_id`, `usuario_id`, `data_atendimento`, `hora_atendimento`, `descricao`, `observacao_final`, `status`, `criado_em`) VALUES
+(1, 1, 1, 1, '2026-06-09', '20:58:00', 'Solicitação de boletim escolar', 'Solicitação completa e documento enviado', 'aberto', '2026-06-10 22:47:33');
 
 -- --------------------------------------------------------
 
@@ -167,7 +165,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `atendimentos`
 --
 ALTER TABLE `atendimentos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `pessoas`

@@ -29,7 +29,7 @@ window.AtendeLabApi = (() => {
 
     function toList(data) {
         if (Array.isArray(data)) return data;
-        for (const key of ['dados', 'items', 'registros', 'pessoas', 'tipos', 'atendimentos', 'usuarios']) {
+        for (const key of ['dados', 'items', 'registros', 'pessoes', 'tipos', 'atendimentos', 'usuarios']) {
             if (Array.isArray(data?.[key])) return data[key];
         }
         return [];
