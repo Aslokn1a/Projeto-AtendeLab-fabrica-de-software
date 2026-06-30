@@ -33,7 +33,7 @@
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Horário *</label>
-                    <input class="form-control" type="time" name="horario_atendimento" required>
+                    <input class="form-control" type="time" name="hora_atendimento" required>
                 </div>
                 <div class="col-12">
                     <label class="form-label">Descrição *</label>
