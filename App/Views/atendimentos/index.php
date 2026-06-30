@@ -1,6 +1,6 @@
 <?php
-    $tituloPagina = 'Atendimentos';
-    require __DIR__ . '/../layouts/header.php';
+$tituloPagina = 'Atendimentos';
+require __DIR__ . '/../layouts/header.php';
 ?>
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
     <div>
@@ -23,7 +23,7 @@
                     <label class="form-label">Pessoa *</label>
                     <select class="form-select" name="pessoa_id" id="pessoaSelect" required></select>
                 </div>
-                    <div class="col-md-6">
+                <div class="col-md-6">
                     <label class="form-label">Tipo *</label>
                     <select class="form-select" name="tipo_atendimento_id" id="tipoSelect" required></select>
                 </div>
@@ -39,6 +39,18 @@
                     <label class="form-label">Descrição *</label>
                     <textarea class="form-control" name="descricao" rows="3" required></textarea>
                 </div>
+                <div class="col-12">
+                    <label class="form-label">Observação final</label>
+                    <textarea class="form-control" name="observacao_final" rows="2"></textarea>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Status inicial</label>
+                    <select class="form-select" name="status">
+                        <option value="aberto">Aberto</option>
+                        <option value="em_andamento">Em andamento</option>
+                        <option value="concluido">Concluído</option>
+                    </select>
+                </div>
             </div>
             <div class="d-flex gap-2 mt-3">
                 <button class="btn btn-success" type="submit">
@@ -53,26 +65,27 @@
 </div>
 <div class="card border-0 shadow-sm">
     <div class="table-responsive">
-    <table class="table table-hover align-middle mb-0">
-        <thead class="table-light">
-            <tr>
-                <th>ID</th>
-                <th>Pessoa</th>
-                <th>Tipo</th>
-                <th>Responsável</th>
-                <th>Data</th>
-                <th>Status</th>
-                <th class="text-end">Ações</th>
-            </tr>
-        </thead>
-        <tbody id="tabelaAtendimentos">
-            <tr>
-                <td colspan="7" class="text-center py-4">
-                    Carregando...
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Pessoa</th>
+                    <th>Tipo</th>
+                    <th>Responsável</th>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>Status</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+            </thead>
+            <tbody id="tabelaAtendimentos">
+                <tr>
+                    <td colspan="8" class="text-center py-4">
+                        Carregando...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <div class="modal fade" id="modalStatus" tabindex="-1">
@@ -95,7 +108,8 @@
                     </div>
                     <div>
                         <label class="form-label">Observação final</label>
-                        <textarea class="form-control" name="observacao_final" rows="3" placeholder="Obrigatória ao concluir"></textarea>
+                        <textarea class="form-control" name="observacao_final" rows="3"
+                            placeholder="Obrigatória ao concluir"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -111,102 +125,112 @@
     </div>
 </div>
 <script>
-const formAtendimento = document.getElementById('formAtendimento');
-const cardFormulario = document.getElementById('cardFormulario');
-const statusModal = () => {
-    return bootstrap.Modal.getOrCreateInstance(document.getElementById('modalStatus'));
-};
-function novoAtendimento() {
-    cardFormulario.classList.remove('d-none');
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-}
-function fecharFormulario() {
-    cardFormulario.classList.add('d-none');
-    formAtendimento.reset();
-}
-function labelRegistro(obj, ...keys) {
-    for (const key of keys) {
-        if (obj[key] !== undefined && obj[key] !== null) {
-            return obj[key];
-        }
+    const formAtendimento = document.getElementById('formAtendimento');
+    const cardFormulario = document.getElementById('cardFormulario');
+    const tituloFormulario = cardFormulario.querySelector('.h5');
+    const statusModal = () => {
+        return bootstrap.Modal.getOrCreateInstance(document.getElementById('modalStatus'));
+    };
+    function novoAtendimento() {
+        tituloFormulario.textContent = 'Novo atendimento';
+        cardFormulario.classList.remove('d-none');
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     }
-    return '';
-}
-async function carregarCombos() {
-    const [pessoasResp, tiposResp] = await Promise.all([
-        AtendeLabApi.get('pessoas', 'listar'),
-        AtendeLabApi.get('tipos', 'listar')
-    ]);
-    const pessoas = AtendeLabApi.toList(pessoasResp).filter(pessoa => pessoa.status !== 'inativo');
-    const tipos = AtendeLabApi.toList(tiposResp).filter(tipo => tipo.status !== 'inativo');
-    document.getElementById('pessoaSelect').innerHTML ='<option value="">Selecione</option>' + 
-    pessoas.map(pessoa => `<option value="${Number(pessoa.id)}">${AtendeLabApi.escape(pessoa.nome)}
+    function fecharFormulario() {
+        cardFormulario.classList.add('d-none');
+        formAtendimento.reset();
+    }
+    function labelRegistro(obj, ...keys) {
+        for (const key of keys) {
+            if (obj[key] !== undefined && obj[key] !== null) {
+                return obj[key];
+            }
+        }
+        return '';
+    }
+    async function carregarCombos() {
+        const [pessoasResp, tiposResp] = await Promise.all([
+            AtendeLabApi.get('pessoas', 'listar'),
+            AtendeLabApi.get('tipos', 'listar')
+        ]);
+        const pessoas = AtendeLabApi.toList(pessoasResp).filter(pessoa => pessoa.status !== 'inativo');
+        const tipos = AtendeLabApi.toList(tiposResp).filter(tipo => tipo.status !== 'inativo');
+        document.getElementById('pessoaSelect').innerHTML = '<option value="">Selecione</option>' +
+            pessoas.map(pessoa => `<option value="${Number(pessoa.id)}">${AtendeLabApi.escape(pessoa.nome)}
     </option>
     `).join('');
-    document.getElementById('tipoSelect').innerHTML ='<option value="">Selecione</option>' +
-    tipos.map(tipo => `
+        document.getElementById('tipoSelect').innerHTML = '<option value="">Selecione</option>' +
+            tipos.map(tipo => `
     <option value="${Number(tipo.id)}">
     ${AtendeLabApi.escape(tipo.nome)}
     </option>
     `).join('');
-}
-async function carregarAtendimentos() {
-    try {
-        const resposta = await AtendeLabApi.get('atendimentos', 'listar');
-        const atendimentos = AtendeLabApi.toList(resposta);
-        const tbody = document.getElementById('tabelaAtendimentos');
-        if (!atendimentos.length) {
-            tbody.innerHTML = `
+    }
+    async function carregarAtendimentos() {
+        try {
+            const resposta = await AtendeLabApi.get('atendimentos', 'listar');
+            const atendimentos = AtendeLabApi.toList(resposta);
+            const tbody = document.getElementById('tabelaAtendimentos');
+            if (!atendimentos.length) {
+                tbody.innerHTML = `
             <tr>
-            <td colspan="7" class="text-center py-4">
+            <td colspan="8" class="text-center py-4">
             Nenhum atendimento registrado.
             </td>
             </tr>
             `;
-            return;
-        }
-        tbody.innerHTML = atendimentos.map(atendimento => {
-            const pessoa = labelRegistro(
-            atendimento,
-            'pessoa',
-            'pessoa_nome',
-            'nome_pessoa'
-            );
-            const tipo = labelRegistro(
-            atendimento,
-            'tipo',
-            'tipo_nome',
-            'tipo_atendimento',
-            'nome_tipo'
-            );
-            const responsavel = labelRegistro(
-            atendimento,
-            'responsavel',
-            'usuario',
-            'usuario_nome',
-            'nome_usuario'
-            );
-            const data = labelRegistro(
-            atendimento,
-            'data_atendimento',
-            'data'
-            );
-            const classeStatus =
-            atendimento.status === 'concluido'
-            ? 'text-bg-success'
-            : atendimento.status === 'em_andamento'
-            ? 'text-bg-warning'
-            : 'text-bg-primary';
-            return `
+                return;
+            }
+            tbody.innerHTML = atendimentos.map(atendimento => {
+                const pessoa = labelRegistro(
+                    atendimento,
+                    'pessoa',
+                    'pessoa_nome',
+                    'nome_pessoa'
+                );
+                const tipo = labelRegistro(
+                    atendimento,
+                    'tipo',
+                    'tipo_nome',
+                    'tipo_atendimento',
+                    'nome_tipo'
+                );
+                const responsavel = labelRegistro(
+                    atendimento,
+                    'responsavel',
+                    'responsavel_nome',
+                    'usuario',
+                    'usuario_nome',
+                    'nome_usuario'
+                );
+                const data = labelRegistro(
+                    atendimento,
+                    'data_atendimento',
+                    'data'
+                );
+                const hora = labelRegistro(
+                    atendimento,
+                    'hora_atendimento',
+                    'horario_atendimento',
+                    'hora'
+                );
+                const classeStatus =
+                    atendimento.status === 'concluido'
+                        ? 'text-bg-success'
+                        : atendimento.status === 'em_andamento'
+                            ? 'text-bg-warning'
+                            : 'text-bg-primary';
+                return `
             <tr>
             <td>${AtendeLabApi.escape(atendimento.id)}</td>
             <td>${AtendeLabApi.escape(pessoa)}</td>
             <td>${AtendeLabApi.escape(tipo)}</td>
             <td>${AtendeLabApi.escape(responsavel)}</td>
             <td>${AtendeLabApi.escape(data)}</td>
+                <td>${AtendeLabApi.escape(hora)}</td>
             <td>
             <span class="badge ${classeStatus}">
             ${AtendeLabApi.escape(atendimento.status)}
@@ -224,61 +248,64 @@ async function carregarAtendimentos() {
             </td>
             </tr>
             `;
-        }).join('');
-    } catch (error) {
-    AtendeLabApi.showAlert('alerta', error.message, 'danger');
+            }).join('');
+        } catch (error) {
+            AtendeLabApi.showAlert('alerta', error.message, 'danger');
+        }
     }
-}
-formAtendimento.addEventListener('submit', async event => {
-    event.preventDefault();
-    try {
-        await AtendeLabApi.post(
-        'atendimentos',
-        'criar',
-        new FormData(formAtendimento)
-        );
-        AtendeLabApi.showAlert(
-        'alerta',
-        'Atendimento registrado com sucesso.'
-        );
-        fecharFormulario();
-        await carregarAtendimentos();
-    } catch (error) {
-        AtendeLabApi.showAlert('alerta', error.message, 'danger');
+    formAtendimento.addEventListener('submit', async event => {
+        event.preventDefault();
+        try {
+            await AtendeLabApi.post(
+                'atendimentos',
+                'criar',
+                new FormData(formAtendimento)
+            );
+            fecharFormulario();
+            tituloFormulario.textContent = 'Novo atendimento';
+            await carregarAtendimentos();
+            AtendeLabApi.showAlert(
+                'alerta',
+                'Atendimento registrado com sucesso.',
+                'success'
+            );
+        } catch (error) {
+            AtendeLabApi.showAlert('alerta', error.message, 'danger');
+        }
+    });
+    function abrirStatus(id, status) {
+        document.getElementById('statusId').value = id;
+        document.querySelector('#formStatus [name="status"]').value =
+            status || 'aberto';
+        document.querySelector('#formStatus [name="observacao_final"]').value = '';
+        statusModal().show();
     }
-});
-function abrirStatus(id, status) {
-    document.getElementById('statusId').value = id;
-    document.querySelector('#formStatus [name="status"]').value =
-    status || 'aberto';
-    document.querySelector('#formStatus [name="observacao_final"]').value = '';
-    statusModal().show();
-}
-document.getElementById('formStatus').addEventListener('submit', async event => {
-    event.preventDefault();
-    try {
-    await AtendeLabApi.post(
-    'atendimentos',
-    'alterarStatus',
-    new FormData(event.target)
-    );
-    statusModal().hide();
-    AtendeLabApi.showAlert(
-    'alerta',
-    'Status atualizado com sucesso.'
-    );
-    await carregarAtendimentos();
-    } catch (error) {
-    AtendeLabApi.showAlert('alerta', error.message, 'danger');
-    }
-});
-document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        await carregarCombos();
-        await carregarAtendimentos();
-    } catch (error) {
-        AtendeLabApi.showAlert('alerta', error.message, 'danger');
-    }
-});
+    document.getElementById('formStatus').addEventListener('submit', async event => {
+        event.preventDefault();
+        try {
+            await AtendeLabApi.post(
+                'atendimentos',
+                'alterarStatus',
+                new FormData(event.target)
+            );
+            statusModal().hide();
+            await carregarAtendimentos();
+            AtendeLabApi.showAlert(
+                'alerta',
+                'Status atualizado com sucesso.',
+                'success'
+            );
+        } catch (error) {
+            AtendeLabApi.showAlert('alerta', error.message, 'danger');
+        }
+    });
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            await carregarCombos();
+            await carregarAtendimentos();
+        } catch (error) {
+            AtendeLabApi.showAlert('alerta', error.message, 'danger');
+        }
+    });
 </script>
 <?php require __DIR__ . '/../layouts/footer.php'; ?>

@@ -63,7 +63,7 @@ class PessoasController
         $curso = trim($_POST['curso'] ?? '');
         $periodo = trim($_POST['periodo'] ?? '');
         $status = $_POST['status'] ?? 'ativo';
-        $perfil = trim($_POST['observacoes'] ?? '');
+        $observacoes = trim($_POST['observacoes'] ?? '');
 
 
 

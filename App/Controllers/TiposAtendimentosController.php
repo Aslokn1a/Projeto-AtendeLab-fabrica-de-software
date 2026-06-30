@@ -20,7 +20,7 @@ class TiposAtendimentosController
     public function listar(): void
     {
         $sql = 'SELECT id, nome, descricao, status
-                FROM tipos_atendimentos ORDER BY nome';
+            FROM tipos_atendimentos ORDER BY nome';
         $this->json($this->pdo->query($sql)->fetchALL(PDO::FETCH_ASSOC));
     }
 
@@ -80,7 +80,7 @@ class TiposAtendimentosController
             $this->json(['erro' => 'ID e nome são obrigatórios'], 422);
             return;
         }
-        if (!in_array($status, ['ativo,inativo'], true)) {
+        if (!in_array($status, ['ativo', 'inativo'], true)) {
             $this->json(['erro' => 'Status inválido'], 422);
             return;
         }

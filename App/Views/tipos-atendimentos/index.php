@@ -1,6 +1,6 @@
 <?php
-    $tituloPagina = 'Tipos de atendimento';
-    require __DIR__ . '/../layouts/header.php';
+$tituloPagina = 'Tipos de atendimento';
+require __DIR__ . '/../layouts/header.php';
 ?>
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
     <div>
@@ -20,9 +20,9 @@
                     <label class="form-label">Nome *</label>
                     <input class="form-control" name="nome" required>
                 </div>
-                <div class="col-md-3"> 
+                <div class="col-md-3">
                     <label class="form-label">Status</label>
-                    <select class="form-select" name="status"> 
+                    <select class="form-select" name="status">
                         <option value="ativo">Ativo</option>
                         <option value="inativo">Inativo</option>
                     </select>
@@ -33,11 +33,11 @@
                 </div>
             </div>
             <div class="d-flex gap-2 mt-3"><button class="btn btn-success">
-                Salvar
-            </button>
-            <button class="btn btn-outline-secondary" type="button" onclick="fecharFormulario()">
-                Cancelar
-            </button>
+                    Salvar
+                </button>
+                <button class="btn btn-outline-secondary" type="button" onclick="fecharFormulario()">
+                    Cancelar
+                </button>
             </div>
         </form>
     </div>
@@ -70,8 +70,8 @@
     function abrirFormulario() {
         cardFormulario.classList.remove('d-none');
         window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
+            top: 0,
+            behavior: 'smooth'
         });
     }
     function fecharFormulario() {
@@ -87,8 +87,8 @@
     async function carregarTipos() {
         try {
             const resposta = await AtendeLabApi.get(
-            'tipos',
-            'listar'
+                'tipos',
+                'listar'
             );
             const tipos = AtendeLabApi.toList(resposta);
             if (tipos.length === 0) {
@@ -103,8 +103,8 @@
             }
             tabelaTipos.innerHTML = tipos.map((tipo) => {
                 const classeStatus = tipo.status === 'ativo'
-                ? 'text-bg-success'
-                : 'text-bg-secondary';
+                    ? 'text-bg-success'
+                    : 'text-bg-secondary';
                 return `
                 <tr>
                 <td>
@@ -139,33 +139,33 @@
             }).join('');
         } catch (error) {
             AtendeLabApi.showAlert(
-            'alerta',
-            error.message,
-            'danger'
+                'alerta',
+                error.message,
+                'danger'
             );
         }
     }
     async function editarTipo(id) {
         try {
             const resposta = await AtendeLabApi.get(
-            'tipos',
-            'buscar',
-            { id }
+                'tipos',
+                'buscarPorId',
+                { id }
             );
             const tipo = AtendeLabApi.toObject(resposta);
             novoTipo();
             tituloFormulario.textContent = 'Editar tipo';
             for (const [nomeCampo, valorCampo] of Object.entries(tipo)) {
-            const campo = formTipo.elements.namedItem(nomeCampo);
-            if (campo) {
-                campo.value = valorCampo ?? '';
-            }
+                const campo = formTipo.elements.namedItem(nomeCampo);
+                if (campo) {
+                    campo.value = valorCampo ?? '';
+                }
             }
         } catch (error) {
             AtendeLabApi.showAlert(
-            'alerta',
-            error.message,
-            'danger'
+                'alerta',
+                error.message,
+                'danger'
             );
         }
     }
@@ -173,57 +173,59 @@
         event.preventDefault();
         const id = campoTipoId.value;
         const acao = id
-        ? 'atualizar'
-        : 'criar';
+            ? 'atualizar'
+            : 'criar';
         const mensagemSucesso = id
-        ? 'Tipo atualizado com sucesso.'
-        : 'Tipo cadastrado com sucesso.';
+            ? 'Tipo atualizado com sucesso.'
+            : 'Tipo cadastrado com sucesso.';
         try {
-        await AtendeLabApi.post(
-        'tipos',
-        acao,
-        new FormData(formTipo)
-        );
-        AtendeLabApi.showAlert(
-        'alerta',
-        mensagemSucesso,
-        'success'
-        );
-        fecharFormulario();
-        await carregarTipos();
+            await AtendeLabApi.post(
+                'tipos',
+                acao,
+                new FormData(formTipo)
+            );
+            fecharFormulario();
+            tituloFormulario.textContent = 'Novo tipo';
+            campoTipoId.value = '';
+            await carregarTipos();
+            AtendeLabApi.showAlert(
+                'alerta',
+                mensagemSucesso,
+                'success'
+            );
         } catch (error) {
-        AtendeLabApi.showAlert(
-        'alerta',
-        error.message,
-        'danger'
-        );
+            AtendeLabApi.showAlert(
+                'alerta',
+                error.message,
+                'danger'
+            );
         }
     });
     async function inativarTipo(id) {
         const confirmou = confirm(
-        'Deseja realmente inativar este tipo?'
+            'Deseja realmente inativar este tipo?'
         );
         if (!confirmou) {
-        return;
+            return;
         }
         try {
-        await AtendeLabApi.post(
-        'tipos',
-        'inativar',
-        { id }
-        );
-        AtendeLabApi.showAlert(
-        'alerta',
-        'Tipo inativado com sucesso.',
-        'success'
-        );
-        await carregarTipos();
+            await AtendeLabApi.post(
+                'tipos',
+                'inativar',
+                { id }
+            );
+            AtendeLabApi.showAlert(
+                'alerta',
+                'Tipo inativado com sucesso.',
+                'success'
+            );
+            await carregarTipos();
         } catch (error) {
-        AtendeLabApi.showAlert(
-        'alerta',
-        error.message,
-        'danger'
-        );
+            AtendeLabApi.showAlert(
+                'alerta',
+                error.message,
+                'danger'
+            );
         }
     }
     document.addEventListener(
