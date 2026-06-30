@@ -1,6 +1,6 @@
 <?php
-    $tituloPagina = 'Pessoas atendidas';
-    require __DIR__ . '/../layouts/header.php';
+$tituloPagina = 'Pessoas atendidas';
+require __DIR__ . '/../layouts/header.php';
 ?>
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
     <div>
@@ -34,7 +34,7 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Curso</label>
-                    <input class="form-control" name="curso"> 
+                    <input class="form-control" name="curso">
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Período</label>
@@ -54,8 +54,7 @@
             </div>
             <div class="d-flex gap-2 mt-3">
                 <button class="btn btn-success" type="submit">Salvar</button>
-                <button class="btn btn-outline-secondary" type="button"
-                onclick="fecharFormulario()">Cancelar</button>
+                <button class="btn btn-outline-secondary" type="button" onclick="fecharFormulario()">Cancelar</button>
             </div>
         </form>
     </div>
